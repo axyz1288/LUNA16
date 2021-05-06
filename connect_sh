@@ -1,0 +1,35 @@
+#!/bin/bash
+#./connect_sh steven aiRobots 192.168.1.193
+#./connect_sh aiRobots steven 192.168.1.83
+#cd /home/$1/.ssh
+cd /$1/.ssh
+pwd
+#if [ -f id_rsa ]; then
+#    rm id_rsa.pub id_rsa
+#    echo "Delete id_rsa.pub and id_rsa."
+#fi
+
+ssh-keygen -t rsa
+
+if [ -f id_rsa ]; then
+    # 檔案 /path/to/dir/filename 存在
+    echo "File id_rsa exists.verify"
+    if [ -f id_rsa.pub ]; then
+         echo "File id_rsa.pub exists.verify"
+    fi
+else
+    # 檔案 /path/to/dir/filename 不存在
+    echo "File id_rsa does not exists.:("
+    exit 1
+fi
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+cat ~/.ssh/id_rsa.pub | ssh $2@$3 -p $4 'cat >> .ssh/authorized_keys'
+echo '============================'
+echo 'loging withot password start'
+echo '============================'
+ssh $2@$3 -p $4
+#rm id_rsa.pub id_rsa
+echo '============================'
+echo 'loging withot password over'
+echo '============================'
+
